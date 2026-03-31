@@ -3,33 +3,79 @@ import { useState } from "react";
 function App() {
   const [tasks, setTasks] = useState([]);
   const [input, setInput] = useState("");
+  const [filter, setFilter] = useState("all");
 
   const addTask = () => {
     const trimmedInput = input.trim();
     if (!trimmedInput) return;
+
+    const newTask = {
+      id: Date.now(),
+      text: trimmedInput,
+      completed: false,
+    };
     
-    setTasks((prevTasks) => [...prevTasks, trimmedInput]);
+    setTasks((prev) => [...prev, newTask]);
     setInput("");
   };
 
-  const deleteTask = (indexToDelete) => {
-    const confirmDelete = window.confirm("Delete this task?");
-    if (!confirmDelete) return;
+  const deleteTask = (idToDelete) => {
+    if (!window.confirm("Delete this task?")) return;
 
-    const updatedTasks = tasks.filter((_, index) => index !== indexToDelete);
-    setTasks(updatedTasks);
+    setTasks(tasks.filter((_, index) => index !== idToDelete));
   };
 
   const clearAllTasks = () => {
-    const confirmClear = window.confirm("Clear all tasks?");
-    if (!confirmClear) return;
+    if (!window.confirm("Clear all tasks?")) return;
 
     setTasks([]);
   };
 
+  const toggleComplete = (idToToggle) => {
+    const updatedTasks = tasks.map(task => 
+      task.id === idToToggle
+        ? { ...task, completed: !task.completed }
+        : task
+    );
+
+    setTasks(updatedTasks);
+  };
+
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "completed") return task.completed;
+    if (filter === "pending") return !task.completed;
+    return true;
+  });
+
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
       <h1>Task Manager</h1>
+
+      <p style={{marginBottom: "10px", textAlign: "center"}}>Total Tasks: {tasks.length}</p>
+
+      <div>
+        <button
+          onClick={() => setFilter("all")}
+          style={{fontWeight: filter === "all" ? "bold" : "normal",
+            backgroundColor: filter === "all" ? "black" : "gray",
+            padding: "5px", marginRight: "10px", marginBottom: "10px",
+          }}>All
+        </button>
+        <button
+          onClick={() => setFilter("completed")}
+          style={{fontWeight: filter === "completed" ? "bold" : "normal",
+            backgroundColor: filter === "completed" ? "black" : "gray",
+            padding: "5px", marginRight: "10px", marginBottom: "10px",
+          }}>Completed
+        </button>
+        <button
+          onClick={() => setFilter("pending")}
+          style={{fontWeight: filter === "pending" ? "bold" : "normal",
+            backgroundColor: filter === "pending" ? "black" : "gray",
+            padding: "5px", marginRight: "10px", marginBottom: "10px",
+          }}>Pending
+        </button>
+      </div>
 
       <input
         type="text"
@@ -60,13 +106,22 @@ function App() {
         Clear All
       </button>
 
-      <p style={{ textAlign: "center", marginTop: "10px" }}>
-        {tasks.length === 0 ? "No tasks yet" : `Tasks: ${tasks.length}` }
+      <p style={{ textAlign: "center", marginTop: "10px",}}>
+        {filter === "all" && `All Tasks: ${filteredTasks.length}`}
+        {filter === "completed" && `Completed Tasks: ${filteredTasks.length}`}
+        {filter === "pending" && `Pending Tasks: ${filteredTasks.length}`}
       </p>
 
-      <ul style={{ listStyle: "none", padding: 0 }}>
-        {tasks.map((task, index) => (
-          <li key={index}
+      {filteredTasks.length === 0 ? (
+        <p style={{ textAlign: "center", marginTop: "20px", fontSize: 35 }}>
+          {filter === "all" && "No tasks yet"}
+          {filter === "completed" && "No completed tasks yet"}
+          {filter === "pending" && "No pending tasks yet"}
+        </p>
+      ) : (
+        <ul style={{ listStyle: "none", padding: 0 }}>
+        {filteredTasks.map((task) => (
+          <li key={task.id}
           style={{
             margin: "10px",
             padding: "10px",
@@ -74,11 +129,20 @@ function App() {
             display: "flex",
             justifyContent: "space-between",
           }}>
-            {task}
-            <button onClick={() => deleteTask(index)}>Delete</button>
+            <span
+              onClick={() => toggleComplete(task.id)}
+              style={{
+                textDecoration: task.completed ? "line-through" : "none",
+                cursor: "pointer",
+              }}>
+              {task.text}
+            </span>
+
+            <button onClick={() => deleteTask(task.id)}>Delete</button>
           </li>
         ))}
       </ul>
+      )}
     </div>
   );
 }

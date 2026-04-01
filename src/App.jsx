@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => {
+    try {
+      const savedTasks = localStorage.getItem("tasks");
+      return savedTasks ? JSON.parse(savedTasks) : [];
+    } catch {
+      return [];
+    }
+  });
+
   const [input, setInput] = useState("");
   const [filter, setFilter] = useState("all");
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   const addTask = () => {
     const trimmedInput = input.trim();
@@ -22,13 +34,14 @@ function App() {
   const deleteTask = (idToDelete) => {
     if (!window.confirm("Delete this task?")) return;
 
-    setTasks(tasks.filter((_, index) => index !== idToDelete));
+    setTasks(tasks.filter(task => task.id !== idToDelete));
   };
 
   const clearAllTasks = () => {
     if (!window.confirm("Clear all tasks?")) return;
 
     setTasks([]);
+    localStorage.removeItem("tasks");
   };
 
   const toggleComplete = (idToToggle) => {

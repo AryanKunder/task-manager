@@ -1,7 +1,7 @@
 function TaskList({ filteredTasks, toggleComplete, deleteTask, filter }) {
     if (filteredTasks.length === 0) {
         return (
-            <p style={{ textAlign: "center", marginTop: "20px", fontSize: 35 }}>
+            <p className="text-gray-500 text-3xl font-semibold mt-6">
                 {filter === "all" && "No tasks yet"}
                 {filter === "completed" && "No completed tasks yet"}
                 {filter === "pending" && "No pending tasks yet"}
@@ -10,29 +10,30 @@ function TaskList({ filteredTasks, toggleComplete, deleteTask, filter }) {
     }
 
     return (
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul className="w-full max-w-md">
             {filteredTasks.map((task) => (
                 <li
+                    className="flex justify-between items-center bg-white p-3 mb-2 rounded shadow transition-all duration-200 hover:scale-105 hover:shadow-lg"
                     key={task.id}
-                    style={{
-                        margin: "10px",
-                        padding: "10px",
-                        border: "1px solid #ccc",
-                        display: "flex",
-                        justifyContent: "space-between",
-                    }}
                 >
                     <span
+                        className={`cursor-pointer ${
+                            task.completed
+                                ? "line-through text-gray-500 hover:text-gray-400"
+                                : "text-gray-800 hover:text-gray-600"
+                        }`}
                         onClick={() => toggleComplete(task.id)}
-                        style={{
-                            textDecoration: task.completed ? "line-through" : "none",
-                            cursor: "pointer",
-                        }}
                     >
                         {task.text}
                     </span>
 
-                    <button onClick={() => deleteTask(task.id)}>Delete</button>
+                    <p className="text-xs text-gray-400">
+                        {task.createdAt}
+                    </p>
+
+                    <button
+                        className="text-red-500 hover:text-red-700"
+                        onClick={() => deleteTask(task.id)}>Delete</button>
                 </li>
             ))}
         </ul>

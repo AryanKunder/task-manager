@@ -15,6 +15,7 @@ function App() {
 
   const [input, setInput] = useState("");
   const [filter, setFilter] = useState("all");
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -28,6 +29,7 @@ function App() {
       id: Date.now(),
       text: trimmedInput,
       completed: false,
+      createdAt: new Date().toLocaleString(),
     };
     
     setTasks((prev) => [...prev, newTask]);
@@ -64,30 +66,41 @@ function App() {
   });
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Task Manager</h1>
+    <div className={`${darkMode ? "bg-gray-900" : "bg-gray-100"} min-h-screen flex flex-col items-center p-6`}>
+      <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md">
+        <h1 className="text-4x1 font-bold mb-6 text-gray-800">
+          Task Manager
 
-      <p style={{marginBottom: "10px", textAlign: "center"}}>Total Tasks: {tasks.length}</p>
+          <button
+            className="ml-33 px-3 py-1 bg-gray-800 text-white rounded"
+            onClick={() => setDarkMode(!darkMode)}
+          >
+            Toggle Dark Mode
+          </button>
+        </h1>
 
-      <FilterButtons filter={filter} setFilter={setFilter} />
+        <p className="text-gray-600 mb-2">Total Tasks: {tasks.length}</p>
 
-      <TaskInput
-        input={input}
-        setInput={setInput}
-        addTask={addTask}
-        clearAllTasks={clearAllTasks}
-      />
+        <FilterButtons filter={filter} setFilter={setFilter} />
 
-      <p>
-        {filter.charAt(0).toUpperCase() + filter.slice(1)} Tasks: {filteredTasks.length}
-      </p>
+        <TaskInput
+          input={input}
+          setInput={setInput}
+          addTask={addTask}
+          clearAllTasks={clearAllTasks}
+        />
 
-      <TaskList
-        filteredTasks={filteredTasks}
-        toggleComplete={toggleComplete}
-        deleteTask={deleteTask}
-        filter={filter}
-      />
+        <p className="text-blue-600 font-semibold mb-4">
+          {filter.charAt(0).toUpperCase() + filter.slice(1)} Tasks: {filteredTasks.length}
+        </p>
+
+        <TaskList
+          filteredTasks={filteredTasks}
+          toggleComplete={toggleComplete}
+          deleteTask={deleteTask}
+          filter={filter}
+        />
+      </div>
     </div>
   );
 }

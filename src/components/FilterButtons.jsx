@@ -1,41 +1,35 @@
 function FilterButtons({ filter, setFilter }) {
     return (
-        <div>
+        <div className="mb-4 flex gap-2">
             <button
+                className={`px-3 py-1 rounded ${
+                    filter === "all"
+                        ? "bg-black text-white"
+                        : "bg-gray-300 hover:bg-gray-400"   
+                }`}
                 onClick={() => setFilter("all")}
-                style={{
-                    fontWeight: filter === "all" ? "bold" : "normal",
-                    backgroundColor: filter === "all" ? "black" : "gray",
-                    padding: "5px",
-                    marginRight: "10px",
-                    marginBottom: "10px",
-                }}
             >
                 All
             </button>
 
             <button
+                className={`px-3 py-1 rounded ${
+                    filter === "completed"
+                        ? "bg-black text-white"
+                        : "bg-gray-300 hover:bg-gray-400"   
+                }`}
                 onClick={() => setFilter("completed")}
-                style={{
-                    fontWeight: filter === "completed" ? "bold" : "normal",
-                    backgroundColor: filter === "completed" ? "black" : "gray",
-                    padding: "5px",
-                    marginRight: "10px",
-                    marginBottom: "10px",
-                }}
             >
                 Completed
             </button>
 
             <button
+                className={`px-3 py-1 rounded ${
+                    filter === "pending"
+                        ? "bg-black text-white"
+                        : "bg-gray-300 hover:bg-gray-400"   
+                }`}
                 onClick={() => setFilter("pending")}
-                style={{
-                    fontWeight: filter === "pending" ? "bold" : "normal",
-                    backgroundColor: filter === "pending" ? "black" : "gray",
-                    padding: "5px",
-                    marginRight: "10px",
-                    marginBottom: "10px",
-                }}
             >
                 Pending
             </button>

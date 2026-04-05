@@ -20,7 +20,11 @@ function TaskList({ filteredTasks, toggleComplete, deleteTask, filter }) {
                         className={`cursor-pointer ${
                             task.completed
                                 ? "line-through text-gray-500 hover:text-gray-400"
-                                : "text-gray-800 hover:text-gray-600"
+                                : task.priority === "high"
+                                ? "text-red-800 hover:text-red-600"
+                                : task.priority === "low"
+                                ? "text-green-800 hover:text-green-600"
+                                : "text-yellow-800 hover:text-yellow-600"
                         }`}
                         onClick={() => toggleComplete(task.id)}
                     >

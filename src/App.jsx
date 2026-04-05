@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import TaskInput from "./components/TaskInput";
 import TaskList from "./components/TaskList";
 import FilterButtons from "./components/FilterButtons";
@@ -16,6 +16,8 @@ function App() {
   const [input, setInput] = useState("");
   const [filter, setFilter] = useState("all");
   const [darkMode, setDarkMode] = useState(false);
+  const [search, setSearch] = useState("");
+  const [priority, setPriority] = useState("medium");
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -29,6 +31,7 @@ function App() {
       id: Date.now(),
       text: trimmedInput,
       completed: false,
+      priority: priority,
       createdAt: new Date().toLocaleString(),
     };
     
@@ -59,11 +62,19 @@ function App() {
     setTasks(updatedTasks);
   };
 
+  const priorityOrder = {
+    high: 3,
+    medium: 2,
+    low: 1,
+  };
+
   const filteredTasks = tasks.filter((task) => {
     if (filter === "completed") return task.completed;
     if (filter === "pending") return !task.completed;
     return true;
-  });
+  }).filter((task) => 
+    task.text.toLowerCase().includes(search.toLowerCase())
+  ).sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]);
 
   return (
     <div className={`${darkMode ? "bg-gray-900" : "bg-gray-100"} min-h-screen flex flex-col items-center p-6`}>
@@ -88,11 +99,31 @@ function App() {
           setInput={setInput}
           addTask={addTask}
           clearAllTasks={clearAllTasks}
+          priority={priority}
+          setPriority={setPriority}
         />
+
+        <select
+          className="p-2 border rounded mb-4"
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+        >
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
 
         <p className="text-blue-600 font-semibold mb-4">
           {filter.charAt(0).toUpperCase() + filter.slice(1)} Tasks: {filteredTasks.length}
         </p>
+
+        <input
+          className="p-2 border rounded w-full mb-4"
+          type="text"
+          placeholder="Search tasks..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
         <TaskList
           filteredTasks={filteredTasks}

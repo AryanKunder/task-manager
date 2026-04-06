@@ -78,19 +78,19 @@ function App() {
 
   return (
     <div className={`${darkMode ? "bg-gray-900" : "bg-gray-100"} min-h-screen flex flex-col items-center p-6`}>
-      <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md">
-        <h1 className="text-4x1 font-bold mb-6 text-gray-800">
+      <div className={`${darkMode ? "bg-gray-800" : "bg-white"} p-6 rounded-xl shadow-md w-full max-w-md`}>
+        <h1 className={`${darkMode ? "text-gray-200" : "text-gray-800"} text-4x1 font-bold mb-6`}>
           Task Manager
 
           <button
-            className="ml-33 px-3 py-1 bg-gray-800 text-white rounded"
+            className={`${darkMode ? "bg-gray-200 text-black" : "bg-gray-800 text-white"} ml-33 px-3 py-1 rounded`}
             onClick={() => setDarkMode(!darkMode)}
           >
             Toggle Dark Mode
           </button>
         </h1>
 
-        <p className="text-gray-600 mb-2">Total Tasks: {tasks.length}</p>
+        <p className={`${darkMode ? "text-gray-400" : "text-gray-600"} mb-2`}>Total Tasks: {tasks.length}</p>
 
         <FilterButtons filter={filter} setFilter={setFilter} />
 
@@ -104,13 +104,13 @@ function App() {
         />
 
         <select
-          className="p-2 border rounded mb-4"
+          className={`${darkMode ? "text-gray-600" : "text-black"} p-2 border border-black bg-gray-100 font-semibold rounded mb-4`}
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
         >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
+          <option className="font-semibold" value="low">Low</option>
+          <option className="font-semibold" value="medium">Medium</option>
+          <option className="font-semibold" value="high">High</option>
         </select>
 
         <p className="text-blue-600 font-semibold mb-4">
@@ -118,7 +118,7 @@ function App() {
         </p>
 
         <input
-          className="p-2 border rounded w-full mb-4"
+          className="p-2 border border-black bg-gray-200 rounded w-full mb-4"
           type="text"
           placeholder="Search tasks..."
           value={search}

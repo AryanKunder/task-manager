@@ -13,7 +13,7 @@ function TaskList({ filteredTasks, toggleComplete, deleteTask, filter }) {
         <ul className="w-full max-w-md">
             {filteredTasks.map((task) => (
                 <li
-                    className="flex justify-between items-center bg-white p-3 mb-2 rounded shadow transition-all duration-200 hover:scale-105 hover:shadow-lg"
+                    className="flex justify-between items-center p-3 mb-2 bg-gray-300 rounded shadow transition-all duration-200 hover:scale-105 hover:shadow-lg"
                     key={task.id}
                 >
                     <span

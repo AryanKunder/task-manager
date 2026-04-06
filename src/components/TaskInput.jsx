@@ -1,8 +1,8 @@
-function TaskInput({ input, setInput, addTask, clearAllTasks }) {
+function TaskInput({ input, setInput, addTask, clearAllTasks, darkMode }) {
     return (
         <div className="flex gap-2 mb-4">
             <input
-                className="p-2 border rounded w-64 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className={`${darkMode ? "bg-gray-800" : "bg-gray-100"} p-2 border rounded w-64 focus:outline-none focus:ring-2 focus:ring-blue-400`}
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
